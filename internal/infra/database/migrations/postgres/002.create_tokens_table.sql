@@ -1,0 +1,10 @@
+CREATE TABLE IF NOT EXISTS tokens (
+    id VARCHAR(36) PRIMARY KEY,
+    instance_id VARCHAR(36) REFERENCES instances(id) ON DELETE SET NULL,
+    token_hash TEXT NOT NULL,
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL
+);
+
+-- DOWN
+DROP TABLE IF EXISTS tokens;
