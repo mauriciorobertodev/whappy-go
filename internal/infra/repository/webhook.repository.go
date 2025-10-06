@@ -214,3 +214,42 @@ func (r *WebhookRepository) Delete(opts ...webhook.WebhookQueryOption) error {
 	_, err := r.db.NamedExec(query, args)
 	return err
 }
+
+func (r *WebhookRepository) Count(opts ...webhook.WebhookQueryOption) (uint64, error) {
+	queryOptions := &webhook.WebhookQueryOptions{}
+	for _, opt := range opts {
+		opt(queryOptions)
+	}
+
+	query := `SELECT COUNT(*) FROM webhooks WHERE 1=1`
+	args := map[string]interface{}{}
+
+	if queryOptions.ID != nil {
+		query += " AND id = :id"
+		args["id"] = *queryOptions.ID
+	}
+	if queryOptions.Active != nil {
+		query += " AND active = :active"
+		args["active"] = *queryOptions.Active
+	}
+	if queryOptions.URL != nil {
+		query += " AND url = :url"
+		args["url"] = *queryOptions.URL
+	}
+	if queryOptions.InstanceID != nil {
+		query += " AND instance_id = :instance_id"
+		args["instance_id"] = *queryOptions.InstanceID
+	}
+
+	var count uint64
+	nstmt, err := r.db.PrepareNamed(query)
+	if err != nil {
+		return 0, err
+	}
+	err = nstmt.Get(&count, args)
+	if err != nil {
+		return 0, err
+	}
+
+	return count, nil
+}
