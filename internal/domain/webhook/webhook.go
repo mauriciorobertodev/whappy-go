@@ -12,7 +12,10 @@ import (
 )
 
 var (
-	ErrNotFound = errors.New("webhook not found")
+	ErrNotFound           = errors.New("webhook not found")
+	ErrInvalidURL         = errors.New("invalid webhook url")
+	ErrInvalidID          = errors.New("invalid webhook id")
+	ErrMaxWebhooksReached = errors.New("maximum number of webhooks reached")
 )
 
 type Payload interface {
@@ -88,6 +91,13 @@ func (w *Webhook) SignEvent(p Payload) (string, error) {
 	h := hmac.New(sha256.New, []byte(w.secret))
 	h.Write(payload)
 	return hex.EncodeToString(h.Sum(nil)), nil
+}
+
+func (w *Webhook) Clear() {
+	w.Active = false
+	w.URL = ""
+	w.Events = []string{}
+	w.UpdatedAt = time.Now().UTC()
 }
 
 func generateSecret() string {
