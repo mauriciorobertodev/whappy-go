@@ -56,4 +56,9 @@ const (
 	CodeFileSourceEmpty     AppCode = "FILE_SOURCE_EMPTY"
 
 	GLOBAL_STORAGE_UNAVAILABLE AppCode = "GLOBAL_STORAGE_UNAVAILABLE"
+
+	CodeWebhookNotFound           AppCode = "WEBHOOK_NOT_FOUND"
+	CodeWebhookInvalidURL         AppCode = "WEBHOOK_INVALID_URL"
+	CodeWebhookInvalidID          AppCode = "WEBHOOK_INVALID_ID"
+	CodeWebhookMaxWebhooksReached AppCode = "WEBHOOK_MAX_WEBHOOKS_REACHED"
 )
