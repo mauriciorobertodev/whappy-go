@@ -87,10 +87,12 @@ func main() {
 	instRepo := repository.NewInstanceRepository(whappyDB)
 	tokenRepo := repository.NewTokenRepository(whappyDB)
 	fileRepo := repository.NewFileRepository(whappyDB)
+	webhookRepo := repository.NewWebhookRepository(whappyDB)
 
 	// Services / Use Cases
 	l.Info("🔧 Setting up services...")
 	tokenService := service.NewTokenService(tokenRepo, hasher, generator, bus, cache)
+	webhookService := service.NewWebhookService(webhookRepo, bus, appConfig.MAX_WEBHOOKS)
 	instService := service.NewInstanceService(tokenService, instRepo, instRegistry, bus)
 	sessionService := service.NewSessionService(instRepo, whatsapp, bus)
 	fileService := service.NewFileService(storage, fileRepo)
@@ -119,6 +121,7 @@ func main() {
 	pictureHandler := handler.NewPictureHandler(pictureService)
 	uploadHandler := handler.NewUploadHandler(uploadService)
 	blocklistHandler := handler.NewBlocklistHandler(blocklistService)
+	webhookHandler := handler.NewWebhookHandler(webhookService)
 
 	// Router
 	l.Info("🛣️  Setting up HTTP routes...")
@@ -134,6 +137,7 @@ func main() {
 	pictureHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
 	uploadHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
 	blocklistHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
+	webhookHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
 
 	if storageConfig.IsLocal() {
 		r.Get("/storage/*", static.New(storageConfig.Path))
