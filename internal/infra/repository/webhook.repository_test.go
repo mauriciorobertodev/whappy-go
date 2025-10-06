@@ -219,4 +219,68 @@ var _ = DescribeTableSubtree("TokenRepository", func(driver string) {
 		err := repo.Delete(webhook.WhereID("not-exist"))
 		Expect(err).To(BeNil())
 	})
+
+	It("should update a webhook", func() {
+		inst := fake.InstanceFactory().WithID("instance-1").Create()
+		Expect(instRepo.Insert(inst)).To(Succeed())
+
+		w1 := fake.WebhookFactory().WithInstanceID(inst.ID).Create()
+		Expect(repo.Insert(w1)).To(Succeed())
+
+		w1.URL = "https://new-url.com/webhook"
+		w1.Events = []string{"event1", "event2"}
+		w1.Deactivate()
+		w1.RenewSecret()
+
+		err := repo.Update(w1)
+		Expect(err).ToNot(HaveOccurred())
+
+		got, err := repo.Get(webhook.WhereID(w1.ID))
+		Expect(err).ToNot(HaveOccurred())
+		Expect(got.ID).To(Equal(w1.ID))
+		Expect(got.InstanceID).To(Equal(w1.InstanceID))
+		Expect(got.URL).To(Equal("https://new-url.com/webhook"))
+		Expect(got.Active).To(BeFalse())
+		Expect(got.Events).To(Equal([]string{"event1", "event2"}))
+		Expect(got.GetSecret()).To(Equal(w1.GetSecret()))
+		Expect(got.CreatedAt).To(BeTemporally("~", w1.CreatedAt, time.Second))
+		Expect(got.UpdatedAt).To(BeTemporally("~", w1.UpdatedAt, time.Second))
+	})
+
+	It("should count webhooks by filter", func() {
+		instRepo.InsertMany([]*instance.Instance{
+			fake.InstanceFactory().WithID("instance-1").Create(),
+			fake.InstanceFactory().WithID("instance-2").Create(),
+			fake.InstanceFactory().WithID("instance-3").Create(),
+		})
+
+		wt1 := fake.WebhookFactory().WithID("id-1").Inactive().WithInstanceID("instance-1").Create()
+		wt2 := fake.WebhookFactory().WithID("id-2").Inactive().WithInstanceID("instance-2").Create()
+		wt3 := fake.WebhookFactory().WithID("id-3").Active().WithInstanceID("instance-3").Create()
+		err := repo.InsertMany([]*webhook.Webhook{
+			wt1, wt2, wt3,
+		})
+
+		Expect(err).To(BeNil())
+
+		count, err := repo.Count(webhook.WhereID("id-1"))
+		Expect(err).To(BeNil())
+		Expect(count).To(Equal(uint64(1)))
+
+		count, err = repo.Count(webhook.WhereInstanceID("instance-2"))
+		Expect(err).To(BeNil())
+		Expect(count).To(Equal(uint64(1)))
+
+		count, err = repo.Count(webhook.WhereActive(true))
+		Expect(err).To(BeNil())
+		Expect(count).To(Equal(uint64(1)))
+
+		count, err = repo.Count(webhook.WhereActive(false))
+		Expect(err).To(BeNil())
+		Expect(count).To(Equal(uint64(2)))
+
+		count, err = repo.Count()
+		Expect(err).To(BeNil())
+		Expect(count).To(Equal(uint64(3)))
+	})
 }, Entry("with SQLite", "sqlite"), Entry("with Postgres", "postgres"))
