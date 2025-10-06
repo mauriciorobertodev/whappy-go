@@ -30,6 +30,8 @@ type WebhookRepository interface {
 	List(opts ...WebhookQueryOption) ([]*Webhook, error)
 
 	Delete(opts ...WebhookQueryOption) error
+
+	Count(opts ...WebhookQueryOption) (uint64, error)
 }
 
 func WhereID(id string) WebhookQueryOption {
