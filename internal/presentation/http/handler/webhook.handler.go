@@ -4,6 +4,7 @@ import (
 	"context"
 
 	"github.com/gofiber/fiber/v3"
+	"github.com/mauriciorobertodev/whappy-go/internal/app"
 	"github.com/mauriciorobertodev/whappy-go/internal/app/input"
 	"github.com/mauriciorobertodev/whappy-go/internal/app/service"
 	"github.com/mauriciorobertodev/whappy-go/internal/domain/instance"
@@ -43,6 +44,10 @@ func (h *WebhookHandler) GetWebhook(c fiber.Ctx) error {
 	})
 
 	if appErr != nil {
+		if appErr.Code == app.CodeWebhookNotFound {
+			return c.Status(fiber.StatusNotFound).JSON(http.NewErrorResponse("Webhook not found", appErr))
+		}
+
 		return c.Status(fiber.StatusBadRequest).JSON(http.NewErrorResponse("Failed to get webhook", appErr))
 	}
 
@@ -94,6 +99,9 @@ func (h *WebhookHandler) UpdateWebhook(c fiber.Ctx) error {
 
 	webhook, appErr := h.webhookService.UpdateWebhook(ctx, inst, req.ToInput(id))
 	if appErr != nil {
+		if appErr.Code == app.CodeWebhookNotFound {
+			return c.Status(fiber.StatusNotFound).JSON(http.NewErrorResponse("Webhook not found", appErr))
+		}
 		return c.Status(fiber.StatusBadRequest).JSON(http.NewErrorResponse("Failed to update webhook", appErr))
 	}
 
@@ -112,6 +120,9 @@ func (h *WebhookHandler) DeleteWebhook(c fiber.Ctx) error {
 	})
 
 	if appErr != nil {
+		if appErr.Code == app.CodeWebhookNotFound {
+			return c.Status(fiber.StatusNotFound).JSON(http.NewErrorResponse("Webhook not found", appErr))
+		}
 		return c.Status(fiber.StatusBadRequest).JSON(http.NewErrorResponse("Failed to delete webhook", appErr))
 	}
 
