@@ -57,13 +57,6 @@ func main() {
 	l.Info("📦 Setting up event bus...")
 	bus := eventbus.New(config.LoadEventBusConfig())
 
-	// Consumers
-	l.Info("🍿 Setting up event consumers...")
-	if appConfig.IsDevelopment() {
-		debugConsumer := consumer.NewDevConsumer()
-		bus.SubscribeAll(debugConsumer.Handler)
-	}
-
 	// Cache
 	l.Info("🧠 Setting up cache...")
 	cache := cache.New(config.LoadCacheConfig())
@@ -103,6 +96,14 @@ func main() {
 	pictureService := service.NewPictureService(whatsapp)
 	uploadService := service.NewUploadService(fileService, fileRepo, storage, bus)
 	blocklistService := service.NewBlocklistService(whatsapp, bus)
+
+	// Consumers
+	l.Info("🍿 Setting up event consumers...")
+	if appConfig.IsDevelopment() {
+		bus.SubscribeAll(consumer.NewDevConsumer().Handler)
+	}
+
+	bus.SubscribeAll(consumer.NewWebhookConsumer(webhookRepo, cache).Handle)
 
 	// Middleware
 	l.Info("🛡️  Setting up middleware...")
