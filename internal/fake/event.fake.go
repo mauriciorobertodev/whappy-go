@@ -32,6 +32,21 @@ func (f *eventFactory) WithPayload(payload any) *eventFactory {
 	return f
 }
 
+func (f *eventFactory) WithOccurredAt(occurredAt time.Time) *eventFactory {
+	f.prototype.OccurredAt = occurredAt
+	return f
+}
+
+func (f *eventFactory) WithInstanceID(instanceID string) *eventFactory {
+	f.prototype.InstanceID = &instanceID
+	return f
+}
+
+func (f *eventFactory) WithRandomName(prefix string) *eventFactory {
+	f.prototype.Name = events.EventName(prefix + uuid.NewString())
+	return f
+}
+
 func (f *eventFactory) Create() events.Event {
 	if f.prototype.Name == "" {
 		f.prototype.Name = events.EventName("fake.event." + uuid.NewString())
