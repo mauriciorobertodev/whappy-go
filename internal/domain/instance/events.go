@@ -1,6 +1,8 @@
 package instance
 
-import "github.com/mauriciorobertodev/whappy-go/internal/domain/events"
+import (
+	"github.com/mauriciorobertodev/whappy-go/internal/domain/events"
+)
 
 // To listen all instance events use "instance:*"
 const (
@@ -25,123 +27,123 @@ const (
 
 // #region Pairing Events
 func (i *Instance) EventPairingStarted() events.Event {
-	return events.Event{
-		Name: EventPairingStarted,
-		Payload: PayloadInstancePairingStarted{
+	return events.New(
+		EventPairingStarted,
+		PayloadInstancePairingStarted{
 			ID:   i.ID,
 			Name: i.Name,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 func (i *Instance) EventQRCodeGenerated(qr string) events.Event {
-	return events.Event{
-		Name: EventPairingQRCode,
-		Payload: PayloadInstanceQRCodeGenerated{
+	return events.New(
+		EventPairingQRCode,
+		PayloadInstanceQRCodeGenerated{
 			ID:     i.ID,
 			QRCode: qr,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 func (i *Instance) EventPairingFailed(code FailPairingFailedCode, attemptedPhone string, err error) events.Event {
-	return events.Event{
-		Name: EventPairingFailed,
-		Payload: PayloadInstancePairingFailed{
+	return events.New(
+		EventPairingFailed,
+		PayloadInstancePairingFailed{
 			ID:             i.ID,
 			Phone:          i.Phone,
 			Code:           code,
 			AttemptedPhone: attemptedPhone,
 			Error:          err,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 // #region Login Events
 func (i *Instance) EventLoggedIn() events.Event {
-	return events.Event{
-		Name: EventSessionLoggedIn,
-		Payload: PayloadInstanceLoggedIn{
+	return events.New(
+		EventSessionLoggedIn,
+		PayloadInstanceLoggedIn{
 			ID:     i.ID,
 			Name:   i.Name,
 			Phone:  i.Phone,
 			JID:    i.JID,
 			Device: i.Device,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 // #region Creation Events
 func (i *Instance) EventCreated() events.Event {
-	return events.Event{
-		Name: EventCreated,
-		Payload: PayloadInstanceCreated{
+	return events.New(
+		EventCreated,
+		PayloadInstanceCreated{
 			ID:   i.ID,
 			Name: i.Name,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 // #region Connection Events
 func (i *Instance) EventConnecting() events.Event {
-	return events.Event{
-		Name: EventSessionConnecting,
-		Payload: PayloadInstanceConnecting{
+	return events.New(
+		EventSessionConnecting,
+		PayloadInstanceConnecting{
 			ID:   i.ID,
 			Name: i.Name,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 func (i *Instance) EventConnectionFailed(err string) events.Event {
-	return events.Event{
-		Name: EventSessionError,
-		Payload: PayloadInstanceConnectionFailed{
+	return events.New(
+		EventSessionError,
+		PayloadInstanceConnectionFailed{
 			ID:    i.ID,
 			Name:  i.Name,
 			Error: err,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 func (i *Instance) EventConnected() events.Event {
-	return events.Event{
-		Name: EventSessionConnected,
-		Payload: PayloadInstanceConnected{
+	return events.New(
+		EventSessionConnected,
+		PayloadInstanceConnected{
 			ID:    i.ID,
 			Name:  i.Name,
 			Phone: i.Phone,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 func (i *Instance) EventDisconnected() events.Event {
-	return events.Event{
-		Name: EventSessionDisconnected,
-		Payload: PayloadInstanceConnected{
+	return events.New(
+		EventSessionDisconnected,
+		PayloadInstanceConnected{
 			ID:    i.ID,
 			Name:  i.Name,
 			Phone: i.Phone,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }
 
 func (i *Instance) EventLoggedOut() events.Event {
-	return events.Event{
-		Name: EventSessionLoggedOut,
-		Payload: PayloadInstanceLoggedOut{
+	return events.New(
+		EventSessionLoggedOut,
+		PayloadInstanceLoggedOut{
 			ID:   i.ID,
 			Name: i.Name,
 		},
-		InstanceID: &i.ID,
-	}
+		&i.ID,
+	)
 }

@@ -13,13 +13,13 @@ func (t *Token) EventRenewed(masked bool) events.Event {
 		token = t.GetMasked()
 	}
 
-	return events.Event{
-		Name: EventRenewed,
-		Payload: PayloadTokenRenewed{
+	return events.New(
+		EventRenewed,
+		PayloadTokenRenewed{
 			ID:     t.ID,
 			Token:  token,
 			Masked: masked,
 		},
-		InstanceID: &t.InstanceID,
-	}
+		&t.InstanceID,
+	)
 }

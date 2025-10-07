@@ -26,7 +26,7 @@ func New(name EventName, payload any, instanceID *string) Event {
 	return Event{
 		Name:       name,
 		Payload:    payload,
-		OccurredAt: time.Now(),
+		OccurredAt: time.Now().UTC(),
 		InstanceID: instanceID,
 	}
 }
