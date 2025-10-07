@@ -21,13 +21,14 @@ and, of course, to level up my **English** — which is still pretty tough for m
 - 👥 **Group & Contact Management** — create, update, and manage groups and contacts.  
 - ⚡ **High-performance Core** — built with [Fiber](https://gofiber.io/) for fast and efficient HTTP handling.  
 - 🗄️ **Database Drivers** — support for `sqlite` and `postgres` with seamless integration.  
-- 📦 **Storage System** — choose between `local` or `S3` for global automatic media saving, and uploads feature.  
+- 📦 **Storage System** — choose between `local` or `s3` for global automatic media saving, and uploads feature.  
 - 📤 **Uploads System** — enable upload routes for users, store files once, and reference them by upload ID.
-- 🕋 **Cache Layer** — `in-memory` or `redis` caching for fast lookups and reduced load.  
+- 🕋 **Cache Layer** — `memory` or `redis` caching for fast lookups and reduced load.  
 - 📤 **Upload Cache** — configurable cache for WhatsApp server uploads (default: 24 h).  
 - 🧩 **Flexible Authentication** — use instance tokens or impersonate an instance via `ADMIN_TOKEN` + `X-Instance-ID` header.
 - 📝 **Beautiful Documentation** — clear API reference and a polished web interface 😏.
-- 🛠 **Event Bus System** — central event hub with `in-memory` and `redis` Pub/Sub drivers for flexible events consumption.
+- 🛠 **Event Bus System** — central event hub with `memory` and `redis` Pub/Sub drivers for flexible events consumption.
+- 🪝 **Instance Webhooks** — register webhook URLs per instance to receive event notifications with secure HMAC-SHA256 signatures.
 <br/>
 
 ## 📌 Endpoints
@@ -120,7 +121,7 @@ Endpoints to manage groups.
 ✅ **DELETE** `/groups/{id}` – Leave group.  
 
 ✅ **PATCH** `/groups/{id}/name`         – Update group name.  
-✅ **PATCH** `/groups/{id}/description`  – Update group description. 
+✅ **PATCH** `/groups/{id}/description`  – Update group description.  
 ✅ **PATCH** `/groups/{id}/disappearing` – Update message disappearing settings. 
 
 ✅ **GET**    `/groups/{id}/photo` – Get group photo.  
