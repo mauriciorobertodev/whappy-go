@@ -18,6 +18,8 @@ func LoadLoggers(level l.Level) {
 	app.RegisterLogger(app.LogKeyUploadService, logger.NewCuteLogger("UPLOAD SERVICE", level))
 	app.RegisterLogger(app.LogKeyBlocklistService, logger.NewCuteLogger("BLOCKLIST SERVICE", level))
 	app.RegisterLogger(app.LogKeyTokenService, logger.NewCuteLogger("TOKEN SERVICE", level))
+	app.RegisterLogger(app.LogKeyWebhookService, logger.NewCuteLogger("WEBHOOK SERVICE", level))
+	app.RegisterLogger(app.LogKeyWebhook, logger.NewCuteLogger("WEBHOOK", level))
 	app.RegisterLogger(app.LogKeyWhatsapp, logger.NewCuteLogger("WHATSAPP", level))
 	app.RegisterLogger(app.LogKeyDatabase, logger.NewCuteLogger("DATABASE", level))
 	app.RegisterLogger(app.LogKeyCache, logger.NewCuteLogger("CACHE", level))
