@@ -106,7 +106,7 @@ var _ = Describe("Webhook entity", func() {
 
 		ev := fake.NewEvent().Create()
 
-		sig, err := wh.SignEvent(ev)
+		sig, err := wh.SignEvent(ev, time.Now().Unix())
 		Expect(err).To(BeNil())
 		Expect(sig).ToNot(BeEmpty())
 
