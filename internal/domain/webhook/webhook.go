@@ -6,6 +6,7 @@ import (
 	"crypto/sha256"
 	"encoding/hex"
 	"errors"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -82,14 +83,17 @@ func (w *Webhook) AttachToInstance(instanceID string) {
 	w.UpdatedAt = time.Now().UTC()
 }
 
-func (w *Webhook) SignEvent(p Payload) (string, error) {
+func (w *Webhook) SignEvent(p Payload, timestamp int64) (string, error) {
 	payload, err := p.ToJSON()
 	if err != nil {
 		return "", err
 	}
 
+	message := append(payload, []byte(fmt.Sprintf("%d", timestamp))...)
+
 	h := hmac.New(sha256.New, []byte(w.secret))
-	h.Write(payload)
+	h.Write(message)
+
 	return hex.EncodeToString(h.Sum(nil)), nil
 }
 
