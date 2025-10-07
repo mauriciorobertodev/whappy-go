@@ -38,6 +38,8 @@ func NewWebhookConsumer(
 func (w *WebhookConsumer) Handle(event events.Event) {
 	l := app.GetWebhookLogger()
 
+	l.Debug("received event for webhook processing", "event", event.Name)
+
 	if event.InstanceID == nil {
 		l.Debug("event has no instance_id, skipping webhook delivery", "event", event.Name)
 		return
@@ -55,11 +57,14 @@ func (w *WebhookConsumer) Handle(event events.Event) {
 		}
 
 		for _, wh := range databaseWebhooks {
+			l.Debug("loaded webhook from database", "webhook_id", wh.ID, "url", wh.URL)
 			webhooks = append(webhooks, c.ToCachedWebhook(wh))
 		}
 
 		_ = c.Set(w.cache, cacheKey, webhooks, cache.DefaultTTL*6) // 30m
 	}
+
+	l.Debug("found webhooks for instance", "instance_id", *event.InstanceID, "count", len(webhooks))
 
 	for _, wh := range webhooks {
 		go func(wh *webhook.Webhook) {
