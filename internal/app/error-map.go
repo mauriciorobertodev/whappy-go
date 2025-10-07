@@ -5,6 +5,7 @@ import (
 	"github.com/mauriciorobertodev/whappy-go/internal/domain/file"
 	"github.com/mauriciorobertodev/whappy-go/internal/domain/instance"
 	"github.com/mauriciorobertodev/whappy-go/internal/domain/token"
+	"github.com/mauriciorobertodev/whappy-go/internal/domain/webhook"
 )
 
 // we can make this in http layer, bur i like to keep it here, em app layer to propagare another presenters if needed
@@ -49,6 +50,11 @@ var errorCodeMap = map[error]AppCode{
 	file.ErrFileCannotBeVoice:   CodeInvalidVoice,
 	file.ErrFileCannotBeDeleted: CodeFileCannotBeDeleted,
 	file.ErrFileSourceEmpty:     CodeFileSourceEmpty,
+
+	webhook.ErrNotFound:           CodeWebhookNotFound,
+	webhook.ErrInvalidURL:         CodeWebhookInvalidURL,
+	webhook.ErrInvalidID:          CodeWebhookInvalidID,
+	webhook.ErrMaxWebhooksReached: CodeWebhookMaxWebhooksReached,
 }
 
 func TranslateError(location string, err error) *AppError {
