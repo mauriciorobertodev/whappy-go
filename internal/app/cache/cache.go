@@ -16,6 +16,7 @@ const (
 	CacheKeyThumbnailPrefix  = "file:thumb:"
 	CacheKeyGroupTypePrefix  = "group:type:"
 	CacheKeyTokenPrefix      = "token:"
+	CacheKeyWebhooksPrefix   = "webhooks:"
 )
 
 type Cache interface {

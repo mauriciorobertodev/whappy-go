@@ -10,14 +10,13 @@ import (
 
 func NewEventInstanceCreated() events.Event {
 	uuid := uuid.NewString()
-	return events.Event{
-		Name: instance.EventCreated,
-		Payload: instance.PayloadInstanceCreated{
+	return events.New(
+		instance.EventCreated,
+		instance.PayloadInstanceCreated{
 			ID:        uuid,
 			Name:      "Fake Instance " + uuid,
 			CreatedAt: time.Now().UTC(),
 		},
-		OccurredAt: time.Now().UTC(),
-		InstanceID: nil,
-	}
+		&uuid,
+	)
 }

@@ -30,6 +30,8 @@ const (
 	LogKeyUploadService    = "upload_service"
 	LogKeyBlocklistService = "blocklist_service"
 	LogKeyTokenService     = "token_service"
+	LogKeyWebhookService   = "webhook_service"
+	LogKeyWebhook          = "webhook"
 	LogKeyWhatsapp         = "whatsapp"
 	LogKeyDatabase         = "database"
 	LogKeyMiddleware       = "middleware"
@@ -104,4 +106,12 @@ func GetTokenServiceLogger() logger.Logger {
 
 func GetMigratorLogger() logger.Logger {
 	return GetLogger(LogKeyMigrator)
+}
+
+func GetWebhookServiceLogger() logger.Logger {
+	return GetLogger(LogKeyWebhookService)
+}
+
+func GetWebhookLogger() logger.Logger {
+	return GetLogger(LogKeyWebhook)
 }

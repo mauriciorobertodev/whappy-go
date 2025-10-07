@@ -19,6 +19,12 @@ test-storage:
 test-repository:
 	clear && ginkgo -v ./internal/infra/repository/...
 
+test-webhook:
+	clear && ginkgo -v ./internal/domain/webhook/...
+
+test-consumer:
+	clear && ginkgo -v ./internal/infra/consumer/...
+
 docker-test-up:
 	clear && docker-compose -f ./docker/docker-compose.test.yml --env-file ./.env.test up -d --remove-orphans
 

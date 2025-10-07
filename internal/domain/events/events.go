@@ -1,6 +1,10 @@
 package events
 
-import "time"
+import (
+	"encoding/json"
+	"strings"
+	"time"
+)
 
 // Name é o identificador do tipo de evento.
 type EventName string
@@ -22,9 +26,40 @@ func New(name EventName, payload any, instanceID *string) Event {
 	return Event{
 		Name:       name,
 		Payload:    payload,
-		OccurredAt: time.Now(),
+		OccurredAt: time.Now().UTC(),
 		InstanceID: instanceID,
 	}
+}
+
+func (e Event) ToJSON() ([]byte, error) {
+	return json.Marshal(e)
+}
+
+func (e *Event) Matches(events []string) bool {
+	for _, pattern := range events {
+		if pattern == "*" {
+			return true
+		}
+
+		if strings.HasSuffix(pattern, "/*") {
+			prefix := strings.TrimSuffix(pattern, "/*")
+			if strings.HasPrefix(string(e.Name), prefix+"/") {
+				return true
+			}
+		}
+
+		if strings.HasSuffix(pattern, ":*") {
+			prefix := strings.TrimSuffix(pattern, ":*")
+			if strings.HasPrefix(string(e.Name), prefix+":") {
+				return true
+			}
+		}
+
+		if pattern == string(e.Name) {
+			return true
+		}
+	}
+	return false
 }
 
 // message:*

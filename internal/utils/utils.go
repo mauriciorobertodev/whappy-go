@@ -1,10 +1,6 @@
 package utils
 
 import (
-	"encoding/base64"
-	"errors"
-	"io"
-	"net/http"
 	"net/url"
 	"strings"
 )
@@ -31,27 +27,6 @@ func IsUUID(str string) bool {
 	}
 
 	return false
-}
-
-func GetDataFromBase64(encoded string) (*[]byte, error) {
-	data, err := base64.StdEncoding.DecodeString(encoded)
-	if err != nil {
-		return nil, err
-	}
-	return &data, nil
-}
-
-func GetDataFromURL(url string) (io.ReadCloser, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-
-	if resp.StatusCode != http.StatusOK {
-		return nil, errors.New("failed to fetch file: " + resp.Status)
-	}
-
-	return resp.Body, nil
 }
 
 func BoolPtr(v bool) *bool {

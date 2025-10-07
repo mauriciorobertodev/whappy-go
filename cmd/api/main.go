@@ -57,13 +57,6 @@ func main() {
 	l.Info("📦 Setting up event bus...")
 	bus := eventbus.New(config.LoadEventBusConfig())
 
-	// Consumers
-	l.Info("🍿 Setting up event consumers...")
-	if appConfig.IsDevelopment() {
-		debugConsumer := consumer.NewDevConsumer()
-		bus.SubscribeAll(debugConsumer.Handler)
-	}
-
 	// Cache
 	l.Info("🧠 Setting up cache...")
 	cache := cache.New(config.LoadCacheConfig())
@@ -87,10 +80,12 @@ func main() {
 	instRepo := repository.NewInstanceRepository(whappyDB)
 	tokenRepo := repository.NewTokenRepository(whappyDB)
 	fileRepo := repository.NewFileRepository(whappyDB)
+	webhookRepo := repository.NewWebhookRepository(whappyDB)
 
 	// Services / Use Cases
 	l.Info("🔧 Setting up services...")
 	tokenService := service.NewTokenService(tokenRepo, hasher, generator, bus, cache)
+	webhookService := service.NewWebhookService(webhookRepo, bus, appConfig.MAX_WEBHOOKS)
 	instService := service.NewInstanceService(tokenService, instRepo, instRegistry, bus)
 	sessionService := service.NewSessionService(instRepo, whatsapp, bus)
 	fileService := service.NewFileService(storage, fileRepo)
@@ -101,6 +96,14 @@ func main() {
 	pictureService := service.NewPictureService(whatsapp)
 	uploadService := service.NewUploadService(fileService, fileRepo, storage, bus)
 	blocklistService := service.NewBlocklistService(whatsapp, bus)
+
+	// Consumers
+	l.Info("🍿 Setting up event consumers...")
+	if appConfig.IsDevelopment() {
+		bus.SubscribeAll(consumer.NewDevConsumer().Handler)
+	}
+
+	bus.SubscribeAll(consumer.NewWebhookConsumer(webhookRepo, cache).Handle)
 
 	// Middleware
 	l.Info("🛡️  Setting up middleware...")
@@ -119,6 +122,7 @@ func main() {
 	pictureHandler := handler.NewPictureHandler(pictureService)
 	uploadHandler := handler.NewUploadHandler(uploadService)
 	blocklistHandler := handler.NewBlocklistHandler(blocklistService)
+	webhookHandler := handler.NewWebhookHandler(webhookService)
 
 	// Router
 	l.Info("🛣️  Setting up HTTP routes...")
@@ -134,6 +138,7 @@ func main() {
 	pictureHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
 	uploadHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
 	blocklistHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
+	webhookHandler.RegisterRoutes(r, authMiddleware, instMiddleware)
 
 	if storageConfig.IsLocal() {
 		r.Get("/storage/*", static.New(storageConfig.Path))

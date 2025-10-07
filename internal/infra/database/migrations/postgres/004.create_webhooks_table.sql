@@ -1,0 +1,15 @@
+CREATE TABLE IF NOT EXISTS webhooks (
+    id VARCHAR(36) PRIMARY KEY,
+    url TEXT NOT NULL,
+    events JSONB NOT NULL,
+    active BOOLEAN NOT NULL DEFAULT FALSE,
+    secret VARCHAR(64) NOT NULL,
+
+    created_at TIMESTAMPTZ NOT NULL,
+    updated_at TIMESTAMPTZ NOT NULL,
+
+    instance_id VARCHAR(36) NOT NULL REFERENCES instances(id) ON DELETE CASCADE
+);
+
+-- DOWN
+DROP TABLE IF EXISTS webhooks;

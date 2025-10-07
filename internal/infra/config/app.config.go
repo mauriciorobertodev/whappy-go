@@ -16,6 +16,8 @@ type AppConfig struct {
 	ADMIN_TOKEN string
 
 	CACHE_FILE_UPLOAD_TTL time.Duration
+
+	MAX_WEBHOOKS int
 }
 
 func (c *AppConfig) IsProduction() bool {
@@ -39,5 +41,6 @@ func LoadAppConfig() *AppConfig {
 		TOKEN_HASHER:          GetEnvString("TOKEN_HASHER", "simple"), // bcrypt, simple
 		ADMIN_TOKEN:           GetEnvString("ADMIN_TOKEN", ""),
 		CACHE_FILE_UPLOAD_TTL: GetEnvDuration("CACHE_FILE_UPLOAD_TTL", 5*time.Minute),
+		MAX_WEBHOOKS:          GetEnvInt("MAX_WEBHOOKS", 1),
 	}
 }

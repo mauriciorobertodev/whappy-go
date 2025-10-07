@@ -43,3 +43,7 @@ func FakeHex(n int) string {
 	}
 	return string(b)
 }
+
+func FakeURL() string {
+	return "https://example.com/" + FakeHex(16)
+}
