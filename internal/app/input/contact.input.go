@@ -10,7 +10,7 @@ type CheckPhones struct {
 
 func (c *CheckPhones) Validate() error {
 	if len(c.Phones) == 0 {
-		return contact.ErrInvalidJID
+		return contact.EmptyPhones
 	}
 
 	return nil

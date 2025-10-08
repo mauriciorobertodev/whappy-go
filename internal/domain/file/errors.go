@@ -20,4 +20,5 @@ var (
 	ErrFileCannotBeDeleted = errors.New("file cannot be deleted")
 
 	ErrFileSourceEmpty = errors.New("file source is empty")
+	ErrInvalidFileID   = errors.New("invalid file ID")
 )

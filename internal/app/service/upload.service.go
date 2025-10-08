@@ -140,6 +140,10 @@ func (s *UploadService) GetUpload(ctx context.Context, inst *instance.Instance, 
 
 	l.Info("Getting file from database", "file", inp.FileID)
 
+	if err := inp.Validate(); err != nil {
+		return nil, app.TranslateError("upload service", err)
+	}
+
 	f, err := s.fileRepo.Get(file.WhereID(inp.FileID))
 	if err != nil {
 		if errors.Is(err, file.ErrFileNotFound) {
@@ -162,6 +166,10 @@ func (s *UploadService) DeleteUpload(ctx context.Context, inst *instance.Instanc
 	if s.storage == nil {
 		l.Error("Global storage is not configured")
 		return app.NewAppError("upload service", app.GLOBAL_STORAGE_UNAVAILABLE, storage.ErrStorageNotConfigured)
+	}
+
+	if err := inp.Validate(); err != nil {
+		return app.TranslateError("upload service", err)
 	}
 
 	l.Info("Deleting file from database", "file", inp.FileID)
@@ -207,6 +215,10 @@ func (s *UploadService) UpdateFileMetadata(ctx context.Context, inst *instance.I
 	l := app.GetUploadServiceLogger()
 
 	l.Info("Updating file metadata in database", "file", inp.FileID)
+
+	if err := inp.Validate(); err != nil {
+		return nil, app.TranslateError("upload service", err)
+	}
 
 	f, err := s.fileRepo.Get(file.WhereID(inp.FileID))
 	if err != nil {

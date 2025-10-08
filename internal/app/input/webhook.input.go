@@ -12,7 +12,7 @@ type CreateWebhook struct {
 }
 
 func (inp *CreateWebhook) Validate() error {
-	if inp.Active && !utils.IsValidURL(inp.URL) {
+	if !utils.IsValidURL(inp.URL) {
 		return webhook.ErrInvalidURL
 	}
 
@@ -22,6 +22,14 @@ func (inp *CreateWebhook) Validate() error {
 type ToggleWebhook struct {
 	ID     string `json:"id"`
 	Active bool   `json:"active"`
+}
+
+func (inp *ToggleWebhook) Validate() error {
+	if !utils.IsUUID(inp.ID) {
+		return webhook.ErrInvalidID
+	}
+
+	return nil
 }
 
 type UpdateWebhook struct {
@@ -34,6 +42,10 @@ type UpdateWebhook struct {
 func (inp *UpdateWebhook) Validate() error {
 	if !utils.IsValidURL(inp.URL) {
 		return webhook.ErrInvalidURL
+	}
+
+	if !utils.IsUUID(inp.ID) {
+		return webhook.ErrInvalidID
 	}
 
 	return nil

@@ -25,6 +25,9 @@ test-webhook:
 test-consumer:
 	clear && ginkgo -v ./internal/infra/consumer/...
 
+test-inputs:
+	clear && ginkgo -v ./internal/app/input/...
+
 docker-test-up:
 	clear && docker-compose -f ./docker/docker-compose.test.yml --env-file ./.env.test up -d --remove-orphans
 

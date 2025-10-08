@@ -5,18 +5,10 @@ import (
 	"crypto/rand"
 	"crypto/sha256"
 	"encoding/hex"
-	"errors"
 	"fmt"
 	"time"
 
 	"github.com/google/uuid"
-)
-
-var (
-	ErrNotFound           = errors.New("webhook not found")
-	ErrInvalidURL         = errors.New("invalid webhook url")
-	ErrInvalidID          = errors.New("invalid webhook id")
-	ErrMaxWebhooksReached = errors.New("maximum number of webhooks reached")
 )
 
 type Payload interface {
