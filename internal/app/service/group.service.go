@@ -30,8 +30,8 @@ func (s *GroupService) GetGroup(ctx context.Context, inst *instance.Instance, in
 	l := app.GetGroupServiceLogger()
 	l.Debug("Getting group", "instance", inst.ID, "group", inp.JID)
 
-	if inp.JID == "" {
-		return nil, app.TranslateError("group service", group.ErrNotFound)
+	if err := inp.Validate(); err != nil {
+		return nil, app.TranslateError("group service", err)
 	}
 
 	g, err := s.whatsapp.GetGroup(ctx, inst, inp.JID, inp.WithParticipants)

@@ -129,6 +129,10 @@ func (s *WebhookService) UpdateWebhook(ctx context.Context, inst *instance.Insta
 func (s *WebhookService) ToggleWebhook(ctx context.Context, inst *instance.Instance, inp input.ToggleWebhook) *app.AppError {
 	l := app.GetUploadServiceLogger()
 
+	if err := inp.Validate(); err != nil {
+		return app.TranslateError("webhook service", err)
+	}
+
 	web, err := s.webRepo.Get(webhook.WhereInstanceID(inst.ID))
 	if err != nil {
 		if errors.Is(err, webhook.ErrNotFound) {
