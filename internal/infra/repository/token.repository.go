@@ -65,3 +65,37 @@ func (r *TokenRepository) Delete(id string) error {
 	_, err := r.db.Exec(`DELETE FROM tokens WHERE id=$1`, id)
 	return err
 }
+
+func (r *TokenRepository) Count(opts ...token.TokenQueryOption) int {
+	params := &token.TokenQueryOptions{
+		OrderBy: "created_at",
+		SortBy:  "DESC",
+	}
+	for _, o := range opts {
+		o(params)
+	}
+
+	query := "SELECT COUNT(*) FROM tokens WHERE 1=1"
+
+	if params.ID != nil {
+		query += " AND id = :id"
+	}
+
+	if params.InstanceID != nil {
+		query += " AND instance_id = :instance_id"
+	}
+
+	var count int
+	nstmt, err := r.db.PrepareNamed(query)
+	if err != nil {
+		return 0
+	}
+	defer nstmt.Close()
+
+	err = nstmt.Get(&count, params)
+	if err != nil {
+		return 0
+	}
+
+	return count
+}

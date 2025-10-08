@@ -8,12 +8,12 @@ const (
 	CodeInvalidJSON      AppCode = "INVALID_JSON"
 	CodeValidationFailed AppCode = "VALIDATION_FAILED"
 	CodeInternalError    AppCode = "INTERNAL_ERROR"
-	CodeInstanceNotFound AppCode = "INSTANCE_NOT_FOUND"
 	CodeMissingData      AppCode = "MISSING_DATA"
 	CodeInvalidCursor    AppCode = "INVALID_CURSOR"
 	CodeInvalidToken     AppCode = "INVALID_TOKEN"
 	CodeNotAdmin         AppCode = "NOT_ADMIN"
 
+	CodeInstanceNotFound            AppCode = "INSTANCE_NOT_FOUND"
 	CodeInstanceBanned              AppCode = "INSTANCE_BANNED"
 	CodeInstanceAlreadyLoggedIn     AppCode = "INSTANCE_ALREADY_LOGGED_IN"
 	CodeInstanceIsPairing           AppCode = "INSTANCE_IS_PAIRING"
@@ -26,6 +26,8 @@ const (
 	CodeInstanceAlreadyDisconnected AppCode = "INSTANCE_ALREADY_DISCONNECTED"
 	CodeInstanceNoQrCode            AppCode = "INSTANCE_NO_QR_CODE"
 	CodeInstanceAlreadyPaired       AppCode = "INSTANCE_ALREADY_PAIRED"
+	CodeInstanceNameTooLong         AppCode = "INSTANCE_NAME_TOO_LONG"
+	CodeInstanceNameTooShort        AppCode = "INSTANCE_NAME_TOO_SHORT"
 
 	CodeFailPairingClientOutdated     AppCode = "FAIL_PAIRING_CLIENT_OUTDATED"
 	CodeFailPairingWithoutMultidevice AppCode = "FAIL_PAIRING_WITHOUT_MULTIDEVICE"

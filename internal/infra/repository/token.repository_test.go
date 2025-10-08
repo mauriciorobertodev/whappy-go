@@ -130,4 +130,19 @@ var _ = DescribeTableSubtree("TokenRepository", func(driver string) {
 		err := repo.Delete("not-exist")
 		Expect(err).To(BeNil())
 	})
+
+	It("should count tokens", func() {
+		Expect(repo.Count()).To(Equal(0))
+
+		inst := fake.InstanceFactory().WithID("instance-1").Create()
+		Expect(instRepo.Insert(inst)).To(Succeed())
+
+		t1 := fake.TokenFactory().WithID("t1").WithInstanceID("instance-1").WithHash("hash-1").Create()
+		t2 := fake.TokenFactory().WithID("t2").WithInstanceID("instance-1").WithHash("hash-2").Create()
+
+		Expect(repo.Insert(t1)).To(Succeed())
+		Expect(repo.Insert(t2)).To(Succeed())
+
+		Expect(repo.Count()).To(Equal(2))
+	})
 }, Entry("with SQLite", "sqlite"), Entry("with Postgres", "postgres"))

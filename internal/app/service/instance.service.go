@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"errors"
 
 	"github.com/mauriciorobertodev/whappy-go/internal/app"
 	"github.com/mauriciorobertodev/whappy-go/internal/app/input"
@@ -69,12 +70,15 @@ func (s *InstanceService) Get(ctx context.Context, inp input.GetInstance) (*inst
 		return inst, nil
 	}
 
-	instance, err := s.instanceRepo.Get(instance.WhereID(inp.ID))
+	inst, err := s.instanceRepo.Get(instance.WhereID(inp.ID))
 	if err != nil {
+		if errors.Is(err, instance.ErrInstanceNotFound) {
+			return nil, app.TranslateError("instance service", instance.ErrInstanceNotFound)
+		}
 		return nil, app.NewDatabaseError("instance service", err)
 	}
 
-	return instance, nil
+	return inst, nil
 }
 
 func (s *InstanceService) RenewToken(ctx context.Context, inp input.RenewInstanceToken) (*token.Token, *app.AppError) {

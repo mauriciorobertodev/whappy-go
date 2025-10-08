@@ -26,6 +26,8 @@ type InstanceRepository interface {
 	List(opts ...InstanceQueryOption) ([]*Instance, error)
 
 	Delete(opts ...InstanceQueryOption) error
+
+	Count(opts ...InstanceQueryOption) int
 }
 
 func WhereID(id string) InstanceQueryOption {
