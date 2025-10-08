@@ -6,23 +6,42 @@ import (
 
 // To listen all instance events use "instance:*"
 const (
-	// To listen all instance events, use the prefix "instance/*"
+	// To listen all instance events, use "instance/*"
+
+	// Published when an instance is created
 	EventCreated events.EventName = "instance:created"
+	// Published when an instance is deleted
 	EventDeleted events.EventName = "instance:deleted"
+	// Published when an instance is updated (name, etc)
 	EventUpdated events.EventName = "instance:updated"
-	EventToken   events.EventName = "instance:token"
-	// To listen all session events, use the prefix "instance:session/*"
-	EventSessionLoggedIn     events.EventName = "instance:session/logged_in"
-	EventSessionLoggedOut    events.EventName = "instance:session/logged_out"
-	EventSessionConnecting   events.EventName = "instance:session/connecting"
-	EventSessionConnected    events.EventName = "instance:session/connected"
+	// Published when a new access token is generated for the instance
+	EventToken events.EventName = "instance:token"
+
+	// To listen all session events, use "instance:session/*"
+
+	// Published when the instance successfully logs in
+	EventSessionLoggedIn events.EventName = "instance:session/logged_in"
+	// Published when the instance successfully logs out
+	EventSessionLoggedOut events.EventName = "instance:session/logged_out"
+	// Published when the instance is trying to connect
+	EventSessionConnecting events.EventName = "instance:session/connecting"
+	// Published when the instance is connected
+	EventSessionConnected events.EventName = "instance:session/connected"
+	// Published when the instance is disconnected
 	EventSessionDisconnected events.EventName = "instance:session/disconnected"
-	EventSessionError        events.EventName = "instance:session/error"
-	// To listen all pairing events, use the prefix "instance:pairing/*"
+	// Published when the instance connection fails
+	EventSessionError events.EventName = "instance:session/error"
+
+	// To listen all pairing events, use "instance:pairing/*"
+
+	// Published when the instance pairing process starts
 	EventPairingStarted events.EventName = "instance:pairing/started"
-	EventPairingQRCode  events.EventName = "instance:pairing/qr"
+	// Published when the instance generates a new QR code for pairing
+	EventPairingQRCode events.EventName = "instance:pairing/qr"
+	// Published when the instance pairing is successful
 	EventPairingSuccess events.EventName = "instance:pairing/success"
-	EventPairingFailed  events.EventName = "instance:pairing/failed"
+	// Published when the instance pairing fails
+	EventPairingFailed events.EventName = "instance:pairing/failed"
 )
 
 // #region Pairing Events
