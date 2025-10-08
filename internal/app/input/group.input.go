@@ -46,7 +46,7 @@ type UpdateGroupName struct {
 
 func (inp *UpdateGroupName) Validate() error {
 	if inp.JID == "" {
-		return group.ErrInviteInvalid
+		return group.ErrInvalidJID
 	}
 
 	if inp.Name == "" {
@@ -67,7 +67,7 @@ type UpdateGroupDescription struct {
 
 func (inp *UpdateGroupDescription) Validate() error {
 	if inp.JID == "" {
-		return group.ErrInviteInvalid
+		return group.ErrInvalidJID
 	}
 
 	if len(inp.Description) > group.MaxDescriptionLength {
@@ -85,7 +85,7 @@ type UpdateGroupSetting struct {
 
 func (inp *UpdateGroupSetting) Validate() error {
 	if inp.JID == "" {
-		return group.ErrInviteInvalid
+		return group.ErrInvalidJID
 	}
 
 	if !inp.Setting.IsValid() {
@@ -106,7 +106,7 @@ type UpdateGroupMessageDuration struct {
 
 func (inp *UpdateGroupMessageDuration) Validate() error {
 	if inp.JID == "" {
-		return group.ErrInviteInvalid
+		return group.ErrInvalidJID
 	}
 
 	if !inp.Duration.IsValid() {
@@ -124,7 +124,7 @@ type UpdateGroupParticipants struct {
 
 func (inp *UpdateGroupParticipants) Validate() error {
 	if inp.JID == "" {
-		return group.ErrInviteInvalid
+		return group.ErrInvalidJID
 	}
 
 	if len(inp.Participants) == 0 {
@@ -204,6 +204,14 @@ func (inp *CreateGroup) Validate() error {
 type GetGroup struct {
 	JID              string `json:"jid"`
 	WithParticipants *bool  `json:"with_participants"`
+}
+
+func (inp *GetGroup) Validate() error {
+	if inp.JID == "" {
+		return group.ErrInvalidJID
+	}
+
+	return nil
 }
 
 type GetGroups struct {

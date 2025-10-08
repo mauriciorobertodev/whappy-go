@@ -134,7 +134,7 @@ func (inp *SendVoiceMessageInput) Validate() error {
 	}
 
 	if inp.Voice == "" {
-		return message.ErrAudioRequired
+		return message.ErrVoiceRequired
 	}
 
 	return nil
@@ -178,6 +178,24 @@ type SendReactionMessageInput struct {
 }
 
 func (inp *SendReactionMessageInput) Validate() error {
+	if inp.To == "" {
+		return message.ErrInvalidJID
+	}
+
+	if inp.Message == "" {
+		return message.ErrInvalidMessageID
+	}
+
+	return nil
+}
+
+type SendReactionInput struct {
+	To      string `json:"to"`
+	Message string `json:"message"`
+	Emoji   string `json:"emoji"`
+}
+
+func (inp *SendReactionInput) Validate() error {
 	if inp.To == "" {
 		return message.ErrInvalidJID
 	}

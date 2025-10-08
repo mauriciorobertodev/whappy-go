@@ -18,7 +18,7 @@ func (inp *ReadMessagesInput) Validate() error {
 	}
 
 	if len(inp.IDs) == 0 {
-		return message.ErrInvalidJID
+		return message.ErrEmptyMessageIDs
 	}
 
 	return nil
@@ -31,24 +31,6 @@ type GenerateMessageIDs struct {
 func (inp *GenerateMessageIDs) Validate() error {
 	if inp.Quantity <= 0 || inp.Quantity > message.MaxGenerateMessageIDs {
 		return message.ErrInvalidQuantity
-	}
-
-	return nil
-}
-
-type SendReactionInput struct {
-	To      string `json:"to"`
-	Message string `json:"message"`
-	Emoji   string `json:"emoji"`
-}
-
-func (inp *SendReactionInput) Validate() error {
-	if inp.To == "" {
-		return message.ErrInvalidJID
-	}
-
-	if inp.Message == "" {
-		return message.ErrInvalidMessageID
 	}
 
 	return nil

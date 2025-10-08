@@ -9,6 +9,10 @@ type CreateInstance struct {
 }
 
 func (i *CreateInstance) Validate() error {
+	if i.Name == "" {
+		return instance.ErrNameTooShort
+	}
+
 	if len(i.Name) > instance.MaxNameLength {
 		return instance.ErrNameTooLong
 	}
