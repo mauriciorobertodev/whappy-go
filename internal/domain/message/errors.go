@@ -13,5 +13,7 @@ var (
 	ErrImageRequired    = errors.New("image is required")
 	ErrVideoRequired    = errors.New("video is required")
 	ErrAudioRequired    = errors.New("audio is required")
+	ErrVoiceRequired    = errors.New("voice is required")
 	ErrDocumentRequired = errors.New("document is required")
+	ErrEmptyMessageIDs  = errors.New("message ids cannot be empty")
 )

@@ -29,6 +29,7 @@ var (
 
 	ErrInstanceNoQrCode = errors.New("instance has no QR code")
 
-	ErrNameTooLong = errors.New("instance name is too long")
-	ErrInvalidID   = errors.New("invalid instance ID")
+	ErrNameTooShort = errors.New("instance name is too short")
+	ErrNameTooLong  = errors.New("instance name is too long")
+	ErrInvalidID    = errors.New("invalid instance ID")
 )
