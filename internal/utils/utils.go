@@ -43,3 +43,7 @@ func StringPtr(v string) *string {
 	}
 	return &v
 }
+
+func Uint32Ptr(v uint32) *uint32 {
+	return &v
+}
