@@ -35,3 +35,9 @@ func (r *InMemoryInstanceRegistry) Remove(id string) {
 	defer r.mu.Unlock()
 	delete(r.instances, id)
 }
+
+func (r *InMemoryInstanceRegistry) Clear() {
+	r.mu.Lock()
+	defer r.mu.Unlock()
+	r.instances = make(map[string]*instance.Instance)
+}
