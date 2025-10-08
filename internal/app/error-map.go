@@ -25,6 +25,8 @@ var errorCodeMap = map[error]AppCode{
 	instance.ErrInstanceAlreadyDisconnected: CodeInstanceAlreadyDisconnected,
 	instance.ErrInstanceNoQrCode:            CodeInstanceNoQrCode,
 	instance.ErrInstanceAlreadyPaired:       CodeInstanceAlreadyPaired,
+	instance.ErrNameTooLong:                 CodeInstanceNameTooLong,
+	instance.ErrNameTooShort:                CodeInstanceNameTooShort,
 
 	// Whatsapp errors
 	whatsapp.ErrClientOutdated:            CodeFailPairingClientOutdated,
