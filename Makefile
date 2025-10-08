@@ -28,6 +28,9 @@ test-consumer:
 test-inputs:
 	clear && ginkgo -v ./internal/app/input/...
 
+test-service:
+	clear && ginkgo -v ./internal/app/service/...
+
 docker-test-up:
 	clear && docker-compose -f ./docker/docker-compose.test.yml --env-file ./.env.test up -d --remove-orphans
 
