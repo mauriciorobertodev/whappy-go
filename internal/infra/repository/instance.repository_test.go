@@ -278,4 +278,32 @@ var _ = DescribeTableSubtree("InstanceRepository", func(driver string) {
 		Expect(list[1].ID).To(Equal("id-3"))
 		Expect(list[2].ID).To(Equal("id-1"))
 	})
+
+	It("should count instances", func() {
+		err := instRepo.InsertMany([]*instance.Instance{
+			fake.InstanceFactory().WithID("id-1").WithName("Instance X").WithStatus("CONNECTED").Create(),
+			fake.InstanceFactory().WithID("id-2").WithName("Instance X").WithStatus("CONNECTING").Create(),
+			fake.InstanceFactory().WithID("id-3").WithName("Instance X").WithStatus("CONNECTED").Create(),
+		})
+
+		Expect(err).To(BeNil())
+
+		count := instRepo.Count()
+		Expect(count).To(Equal(3))
+
+		count = instRepo.Count(instance.WhereID("id-1"))
+		Expect(count).To(Equal(1))
+
+		count = instRepo.Count(instance.WhereName("Instance X"))
+		Expect(count).To(Equal(3))
+
+		count = instRepo.Count(instance.WhereStatus("CONNECTED"))
+		Expect(count).To(Equal(2))
+
+		count = instRepo.Count(instance.WhereStatus("CONNECTING"))
+		Expect(count).To(Equal(1))
+
+		count = instRepo.Count(instance.WhereStatus("NON-EXISTING"))
+		Expect(count).To(Equal(0))
+	})
 }, Entry("with SQLite", "sqlite"), Entry("with Postgres", "postgres"))

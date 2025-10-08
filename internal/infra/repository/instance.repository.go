@@ -255,3 +255,38 @@ func (r *InstanceRepository) Delete(opts ...instance.InstanceQueryOption) error 
 	_, err = nstmt.Exec(params)
 	return err
 }
+
+func (r *InstanceRepository) Count(opts ...instance.InstanceQueryOption) int {
+	params := &instance.InstanceQueryOptions{}
+	for _, opt := range opts {
+		opt(params)
+	}
+
+	query := "SELECT COUNT(*) FROM instances WHERE 1=1"
+
+	if params.ID != nil {
+		query += " AND id = :id"
+	}
+
+	if params.Phone != nil {
+		query += " AND phone = :phone"
+	}
+
+	if params.Status != nil {
+		query += " AND status = :status"
+	}
+
+	nstmt, err := r.db.PrepareNamed(query)
+	if err != nil {
+		return 0
+	}
+	defer nstmt.Close()
+
+	var count int
+	err = nstmt.Get(&count, params)
+	if err != nil {
+		return 0
+	}
+
+	return count
+}
