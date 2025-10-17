@@ -1,3 +1,5 @@
+<img src="https://github.com/user-attachments/assets/d38c53a3-fb60-4a40-83e5-4b60b3997d98" height="80" width="80" />
+
 # Whappy GO
 
 ## WhatsApp + Happy + Go 👍  
